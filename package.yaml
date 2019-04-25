@@ -36,6 +36,7 @@ executables:
     dependencies:
     - spectraled-hs
     - fft
+    - array
     - carray
     - pulse-simple
 
