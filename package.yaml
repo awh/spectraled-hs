@@ -39,6 +39,7 @@ executables:
     - array
     - carray
     - pulse-simple
+    - gloss
 
 tests:
   spectraled-hs-test:
