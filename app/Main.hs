@@ -25,9 +25,10 @@ sampleWindow = 1024
 -- Copy samples from source into a TVar indefinitely
 capture :: Maybe String -> TVar [Float] -> IO ()
 capture source sink = do
-    s <- simpleNew Nothing "spectraled" Record source "capture" sampleSpec Nothing Nothing
+    s <- simpleNew Nothing "spectraled" Record source "capture" sampleSpec Nothing bufferAttr
     forever $ copySamples s
     where
+        bufferAttr = Just $ BufferAttr Nothing Nothing Nothing Nothing (Just $ sampleWindow * 4)
         sampleSpec = SampleSpec (F32 LittleEndian) 44100 1
 
         copySamples s = do
