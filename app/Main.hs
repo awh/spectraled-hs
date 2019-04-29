@@ -44,14 +44,14 @@ render samples =
         renderFrame :: Float -> IO Picture
         renderFrame _ = do
             ss <- atomically $ readTVar samples
-            return $ line $ samplesToPath (-256) $ fft ss
+            return $ line $ samplesToPath (-256) $ fmap log $ fft ss
 
         fft :: [Float] -> [Float]
         fft ss = elems $ amap magnitude $ dftRC $ listArray (0, (length ss - 1)) ss
 
         samplesToPath :: Float -> [Float] -> [Point]
         samplesToPath _ [] = []
-        samplesToPath i (s:ss) = (i, s * 50) : samplesToPath (i + 1) ss
+        samplesToPath i (s:ss) = (i, s * 10) : samplesToPath (i + 1) ss
 
         callback :: Controller -> IO ()
         callback _ = return ()
