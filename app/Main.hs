@@ -1,7 +1,7 @@
 module Main where
 
 import Math.FFT (dftRC)
-import Data.Array.IArray (listArray, amap)
+import Data.Array.IArray (listArray, amap, elems)
 import Data.Array.CArray (CArray)
 import Data.Complex (Complex, magnitude)
 
@@ -39,12 +39,15 @@ render :: TVar [Float] -> IO ()
 render samples = 
     animateIO display white renderFrame callback
     where
-        display = InWindow "spectraled" (sampleWindow, 100) (0, 0)
+        display = InWindow "spectraled" (sampleWindow, 200) (0, 0)
 
         renderFrame :: Float -> IO Picture
         renderFrame _ = do
             ss <- atomically $ readTVar samples
-            return $ line $ samplesToPath (-512) ss
+            return $ line $ samplesToPath (-256) $ fft ss
+
+        fft :: [Float] -> [Float]
+        fft ss = elems $ amap magnitude $ dftRC $ listArray (0, (length ss - 1)) ss
 
         samplesToPath :: Float -> [Float] -> [Point]
         samplesToPath _ [] = []
