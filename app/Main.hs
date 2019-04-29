@@ -16,7 +16,7 @@ import Graphics.Gloss.Data.Controller (Controller)
 import Graphics.Gloss.Data.Display (Display(..))
 import Graphics.Gloss.Data.Picture (Picture(..),Point,blank,line)
 
-source = "alsa_output.pci-0000_00_1b.0.analog-stereo.monitor"
+source = "alsa_output.usb-AudioQuest_AudioQuest_DragonFly_Black_v1.5_AQDFBL0100116667-00.analog-stereo.monitor"
 
 sampleWindow :: Int
 sampleWindow = 1024
@@ -59,22 +59,5 @@ render samples =
 main :: IO ()
 main = do
     samples <- atomically $ newTVar $ take sampleWindow $ repeat (0::Float)
-    captureTID <- forkIO $ capture Nothing samples
-    renderTID <- forkIO $ render samples
-    _ <- getChar
-    return ()
-
-{-
-foo :: CArray Int Float -> CArray Int (Complex Float)
-foo = dftRC
-
-bar :: [Float] -> CArray Int Float
-bar fs = listArray (0, (length fs - 1)) fs
-
-    s <- simpleNew Nothing "example" Record (Just source) "this is an example application"
-        (SampleSpec (F32 LittleEndian) 44100 1) Nothing Nothing
-    xs <- simpleRead s sampleWindow :: IO [Float]
-    simpleFree s
-    let res = foo . bar
-    putStrLn $ show $ amap magnitude $ res xs
--}
+    captureTID <- forkIO $ capture (Just source) samples
+    render samples
