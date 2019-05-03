@@ -18,7 +18,6 @@ import Graphics.Gloss.Data.Picture (Picture(..),Point,blank,line)
 
 source = "alsa_output.usb-AudioQuest_AudioQuest_DragonFly_Black_v1.5_AQDFBL0100116667-00.analog-stereo.monitor"
 
-sampleWindow :: Int
 sampleWindow = 1024
 
 
@@ -58,6 +57,6 @@ render samples =
 
 main :: IO ()
 main = do
-    samples <- atomically $ newTVar $ take sampleWindow $ repeat (0::Float)
+    samples <- atomically $ newTVar $ take sampleWindow $ repeat 0
     captureTID <- forkIO $ capture (Just source) samples
     render samples
